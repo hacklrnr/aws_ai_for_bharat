@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaForge | Content Differentiation Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f8f6; scroll-behavior: smooth; color: #1e293b; }
+        .glass { background: rgba(255,255,255,0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.8); }
+        .text-accent { color: #f59e0b; }
+        .bg-accent { background-color: #f59e0b; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35; pointer-events: none; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+        .floating { animation: float 6s ease-in-out infinite; }
+        .step-card { transition: opacity 0.7s ease, transform 0.7s ease; transform: translateY(24px); opacity: 0; }
+        .step-card.active { transform: translateY(0); opacity: 1; }
+        .topic-input:focus { outline: none; border-color: #f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,0.15); }
+        .pill { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #92400e; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 14px; border-radius: 9999px; display: inline-block; }
+        .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+        .submit-btn { transition: transform 0.2s ease; }
+        .submit-btn:hover { transform: scale(1.08); }
+        .example-chip { cursor: pointer; font-size: 0.75rem; background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 6px 14px; border-radius: 9999px; transition: background 0.2s, border-color 0.2s; }
+        .example-chip:hover { background: #fefce8; border-color: #f59e0b; color: #92400e; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+<nav class="fixed top-0 w-full z-50 glass px-6 md:px-12 py-4 flex justify-between items-center shadow-sm">
+    <div class="text-xl font-extrabold tracking-tight">Idea<span class="text-accent">Forge</span></div>
+    <div class="flex items-center gap-4">
+        <a href="#how-it-works" class="hidden md:block text-sm font-medium text-slate-500 hover:text-slate-800 transition">How it works</a>
+        <button onclick="document.getElementById('search-ui').scrollIntoView({behavior:'smooth'})"
+            class="bg-accent text-slate-900 px-5 py-2 rounded-full text-sm font-semibold hover:shadow-md transition">
+            Get Started
+        </button>
+    </div>
+</nav>
+
+<header class="relative pt-32 pb-16 px-6 flex flex-col items-center text-center overflow-hidden">
+    <div class="blob w-72 h-72 bg-yellow-200 top-16 -left-20"></div>
+    <div class="blob w-64 h-64 bg-slate-200 bottom-0 -right-10 floating" style="animation-delay:2.5s"></div>
+    <div class="pill mb-5">AI-Powered Content Strategy</div>
+    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-5 max-w-3xl">
+        Write What Others<br><span class="text-accent">Forgot to Cover</span>
+    </h1>
+    <p class="max-w-lg text-base text-slate-500 mb-8 leading-relaxed font-light">
+        IdeaForge scans existing articles on your topic and surfaces
+        <strong class="text-slate-700 font-medium">blind spots, missing angles, and unexplored perspectives</strong>
+        — so you can write something genuinely original.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 mb-12">
+        <button onclick="document.getElementById('search-ui').scrollIntoView({behavior:'smooth'})"
+            class="px-7 py-3 bg-slate-900 text-white rounded-full font-semibold text-sm hover:bg-slate-700 transition">
+            Forge New Ideas →
+        </button>
+        <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})"
+            class="px-7 py-3 bg-white text-slate-600 rounded-full font-semibold text-sm border border-slate-200 hover:border-slate-400 transition">
+            See How It Works
+        </button>
+    </div>
+    <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
+        <span>⚡ Amazon Bedrock</span><span>🔍 Real-time Web Analysis</span><span>✍️ Strategic Guidance Only</span>
+    </div>
+</header>
+
+<section id="how-it-works" class="py-20 px-6 bg-white">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-14">
+            <div class="pill mb-4">Process</div>
+            <h2 class="text-3xl md:text-4xl font-extrabold">How <span class="text-accent">IdeaForge</span> Works</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5">
+            <div class="step-card card-hover glass p-6 rounded-2xl border-t-4 border-yellow-400 text-center">
+                <div class="w-11 h-11 bg-yellow-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="layers" class="w-5 h-5 text-yellow-500"></i>
+                </div>
+                <div class="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">Step 01</div>
+                <h3 class="text-base font-bold mb-2">Content Ingestion</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">We scan top articles and blogs to map everything already being said about your topic.</p>
+            </div>
+            <div class="step-card card-hover glass p-6 rounded-2xl border-t-4 border-slate-300 text-center" style="transition-delay:0.15s">
+                <div class="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                </div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Step 02</div>
+                <h3 class="text-base font-bold mb-2">Gap Analysis</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">AI identifies overused narratives, missing viewpoints, and underexplored angles across all sources.</p>
+            </div>
+            <div class="step-card card-hover glass p-6 rounded-2xl border-t-4 border-yellow-400 text-center" style="transition-delay:0.3s">
+                <div class="w-11 h-11 bg-yellow-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="pen-tool" class="w-5 h-5 text-yellow-500"></i>
+                </div>
+                <div class="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-2">Step 03</div>
+                <h3 class="text-base font-bold mb-2">Writer Guidance</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">You get a clear, actionable writing guide — not a finished article. Your voice, our strategy.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="search-ui" class="py-20 px-6 flex justify-center">
+    <div class="w-full max-w-xl">
+        <div class="text-center mb-8">
+            <div class="pill mb-4">Try It Now</div>
+            <h2 class="text-3xl font-extrabold mb-2">Start Forging <span class="text-accent">Better Ideas</span></h2>
+            <p class="text-slate-500 text-sm">Enter any blog topic and get your writing guide in seconds.</p>
+        </div>
+        <div class="glass p-7 rounded-3xl shadow-xl relative">
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-accent p-3 rounded-2xl shadow-lg">
+                <i data-lucide="lightbulb" class="w-5 h-5 text-slate-900"></i>
+            </div>
+            <form id="search-form" class="mt-3">
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Your Topic</label>
+                <div class="relative">
+                    <!-- FIXED: Replaced absolute positioned button with flexbox layout -->
+                    <div class="flex items-center gap-2">
+                        <input id="topic-input" type="text" required
+                            placeholder="e.g. AI in Healthcare, Remote Work…"
+                            class="topic-input w-full py-4 pl-5 rounded-xl bg-white border-2 border-slate-200 text-sm transition flex-1"/>
+                        <button type="submit" 
+                            class="submit-btn bg-slate-900 p-2.5 rounded-lg text-white hover:scale-105 transition-transform">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="mt-4">
+                <p class="text-xs text-slate-400 mb-2">Try an example:</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="example-chip" onclick="fill('Hydrogen powered cars')">Hydrogen powered cars</span>
+                    <span class="example-chip" onclick="fill('Remote work productivity')">Remote work productivity</span>
+                    <span class="example-chip" onclick="fill('AI in healthcare')">AI in healthcare</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="py-8 text-center text-slate-400 text-xs border-t border-slate-100">
+    <div class="mb-1 font-extrabold text-sm text-slate-700">Idea<span class="text-accent">Forge</span></div>
+    <p>Craft what others missed. Powered by Amazon Bedrock.</p>
+</footer>
+
+<script>
+    lucide.createIcons();
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.step-card').forEach(card => observer.observe(card));
+    
+    function fill(text) { 
+        document.getElementById('topic-input').value = text; 
+        document.getElementById('topic-input').focus(); 
+    }
+    
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const topic = document.getElementById('topic-input').value.trim();
+        if (topic) {
+            const baseUrl = window.location.port === "8501" ? "" : "http://localhost:8501";
+            window.location.href = `${baseUrl}/?topic=${encodeURIComponent(topic)}`;
+        }
+    });
+</script>
+</body>
+</html>
