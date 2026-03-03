@@ -342,24 +342,16 @@ try:
     </div>
     """, unsafe_allow_html=True)
 
-except Exception:
+except Exception as e:
+    import traceback
     loading_container.empty()
     st.markdown(f"""
-    <div style='text-align:center; padding: 3rem 2rem;'>
-        <div style='font-size:2.5rem; margin-bottom:1rem;'>⚠️</div>
-        <h3 style='color:#1e293b; margin-bottom:0.75rem;'>Something went wrong</h3>
-        <p style='color:#64748b; margin-bottom:1.5rem; font-size:0.9rem;'>
-            We hit an issue analyzing this topic. Please try again with a different topic.
+    <div style='background:#fef9c3; border-left:3px solid #f59e0b;
+                border-radius:0.75rem; padding:1.5rem 2rem; margin-top:1rem;'>
+        <p style='color:#92400e; font-weight:600; margin:0 0 0.5rem 0;'>
+            ⚠️ Something went wrong — debug info below
         </p>
-        <a href='{LANDER_URL}' style='
-            display: inline-block;
-            background: #f59e0b;
-            color: #1e293b;
-            padding: 0.65rem 1.75rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 0.875rem;
-        '>← Try a different topic</a>
     </div>
     """, unsafe_allow_html=True)
+    st.code(traceback.format_exc(), language="python")
+
