@@ -21,7 +21,7 @@ bedrock = boto3.client(
 )
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
-LANDER_URL = "https://YOUR-LANDER.vercel.app"
+LANDER_URL = "https://ideaforgeaws.vercel.app"
 
 st.markdown("""
 <style>
@@ -363,3 +363,4 @@ except Exception:
         '>← Try a different topic</a>
     </div>
     """, unsafe_allow_html=True)
+
