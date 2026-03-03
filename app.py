@@ -154,7 +154,7 @@ def invoke_nova(prompt: str, max_tokens: int = 800, temperature: float = 0.7) ->
         "inferenceConfig": {"max_new_tokens": max_tokens, "temperature": temperature}
     })
     response = bedrock.invoke_model(
-        modelId="amazon.nova-lite-v2:0",
+        modelId="amazon.nova-lite-v1:0",
         body=body
     )
     result = json.loads(response["body"].read())
@@ -354,4 +354,5 @@ except Exception as e:
     </div>
     """, unsafe_allow_html=True)
     st.code(traceback.format_exc(), language="python")
+
 
