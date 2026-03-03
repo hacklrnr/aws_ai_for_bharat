@@ -15,11 +15,13 @@ st.set_page_config(page_title="IdeaForge | Analysis", layout="wide", initial_sid
 
 bedrock = boto3.client(
     service_name="bedrock-runtime",
-    region_name=os.getenv("AWS_REGION", "us-east-1")
+    region_name=os.getenv("AWS_REGION", "us-east-1"),
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
-LANDER_URL = "https://ideaforgeaws.vercel.app"
+LANDER_URL = "https://YOUR-LANDER.vercel.app"
 
 st.markdown("""
 <style>
@@ -42,17 +44,14 @@ st.markdown("""
     }
 
     .stApp {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        background-color: #f8f8f6;
         min-height: 100vh;
-    }
-
-    h1, h2, h3, p, li, span {
-        color: #f1f5f9 !important;
     }
 
     h1, h2, h3 {
         font-weight: 800;
         letter-spacing: -0.025em;
+        color: #1e293b !important;
     }
 
     .stProgress > div > div > div > div {
@@ -60,11 +59,13 @@ st.markdown("""
     }
 
     .loading-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(16px);
+        border: 1px solid #e2e8f0;
         border-radius: 1.5rem;
         padding: 3rem;
         text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
     }
 
     .status-badge {
@@ -79,20 +80,20 @@ st.markdown("""
     }
 
     .badge-yellow {
-        background: rgba(245, 158, 11, 0.2);
-        color: #fbbf24;
-        border: 1px solid rgba(245, 158, 11, 0.4);
+        background: rgba(245, 158, 11, 0.12);
+        color: #92400e;
+        border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
     .badge-slate {
-        background: rgba(148, 163, 184, 0.15);
-        color: #cbd5e1;
-        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(100, 116, 139, 0.1);
+        color: #475569;
+        border: 1px solid rgba(100, 116, 139, 0.25);
     }
 
     .badge-green {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
+        background: rgba(16, 185, 129, 0.1);
+        color: #065f46;
         border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
@@ -109,33 +110,33 @@ st.markdown("""
     .pulsing { animation: pulse 2s ease-in-out infinite; }
 
     .streamlit-expanderHeader {
-        background: rgba(255,255,255,0.06) !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
+        background: white !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 0.75rem !important;
-        color: #f1f5f9 !important;
+        color: #1e293b !important;
     }
     .streamlit-expanderContent {
-        background: rgba(255,255,255,0.03) !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
+        background: #fafafa !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 0 0 0.75rem 0.75rem !important;
     }
 
     .stMarkdown h2 {
-        color: #fbbf24 !important;
-        border-bottom: 1px solid rgba(245,158,11,0.3);
+        color: #d97706 !important;
+        border-bottom: 2px solid rgba(245, 158, 11, 0.15);
         padding-bottom: 0.4rem;
         margin-top: 1.75rem;
     }
     .stMarkdown h3 {
-        color: #e2e8f0 !important;
+        color: #1e293b !important;
         margin-top: 1.25rem;
     }
     .stMarkdown p, .stMarkdown li {
-        color: #cbd5e1 !important;
+        color: #475569 !important;
         line-height: 1.75;
     }
     .stMarkdown strong {
-        color: #f1f5f9 !important;
+        color: #1e293b !important;
     }
     .stMarkdown ul {
         padding-left: 1.25rem;
@@ -153,7 +154,7 @@ def invoke_nova(prompt: str, max_tokens: int = 800, temperature: float = 0.7) ->
         "inferenceConfig": {"max_new_tokens": max_tokens, "temperature": temperature}
     })
     response = bedrock.invoke_model(
-        modelId="amazon.nova-lite-v1:0",
+        modelId="amazon.nova-lite-v2:0",
         body=body
     )
     result = json.loads(response["body"].read())
@@ -194,10 +195,10 @@ topic = query_params.get("topic", "").strip()
 if not topic:
     st.markdown(f"""
     <div style='text-align: center; padding: 6rem 2rem;'>
-        <div style='font-size: 2rem; font-weight: 800; margin-bottom: 1rem; color: #f1f5f9;'>
+        <div style='font-size: 2rem; font-weight: 800; margin-bottom: 1rem; color: #1e293b;'>
             Idea<span style='color:#f59e0b;'>Forge</span>
         </div>
-        <p style='color: #94a3b8; margin-bottom: 2rem; font-size: 1rem;'>
+        <p style='color: #64748b; margin-bottom: 2rem; font-size: 1rem;'>
             Please use the landing page to submit a topic for analysis.
         </p>
         <a href='{LANDER_URL}' style='
@@ -233,11 +234,11 @@ st.markdown(f"""
 # Header
 st.markdown(f"""
 <div style='text-align: center; padding: 1rem 0 2rem 0;'>
-    <div style='font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;'>
+    <div style='font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: #1e293b;'>
         Idea<span style='color:#f59e0b;'>Forge</span>
     </div>
-    <h1 style='font-size: 1.8rem; margin-bottom: 0.5rem; color: #f1f5f9;'>Your Writing Guide</h1>
-    <p style='color: #94a3b8;'>Topic: <strong style='color: #fbbf24;'>{topic}</strong></p>
+    <h1 style='font-size: 1.8rem; margin-bottom: 0.5rem; color: #1e293b;'>Your Writing Guide</h1>
+    <p style='color: #64748b;'>Topic: <strong style='color: #d97706;'>{topic}</strong></p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -248,8 +249,8 @@ with loading_container.container():
     st.markdown("""
     <div class='loading-card'>
         <div style='font-size: 4rem; margin-bottom: 1.5rem;' class='floating'>🔍</div>
-        <h2 style='color: #f1f5f9; margin-bottom: 1rem;'>Building Your Writing Guide</h2>
-        <p style='color: #94a3b8; margin-bottom: 2rem;'>Scanning existing articles and identifying content gaps...</p>
+        <h2 style='color: #1e293b; margin-bottom: 1rem;'>Building Your Writing Guide</h2>
+        <p style='color: #64748b; margin-bottom: 2rem;'>Scanning existing articles and identifying content gaps...</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -271,7 +272,25 @@ try:
 
     if not raw_articles:
         loading_container.empty()
-        st.error("❌ No articles found for this topic. Try rephrasing it.")
+        st.markdown(f"""
+        <div style='text-align:center; padding: 3rem 2rem;'>
+            <div style='font-size:2.5rem; margin-bottom:1rem;'>🔎</div>
+            <h3 style='color:#1e293b; margin-bottom:0.75rem;'>No articles found</h3>
+            <p style='color:#64748b; margin-bottom:1.5rem; font-size:0.9rem;'>
+                We couldn't find content on this topic. Try rephrasing or using a broader term.
+            </p>
+            <a href='{LANDER_URL}' style='
+                display: inline-block;
+                background: #f59e0b;
+                color: #1e293b;
+                padding: 0.65rem 1.75rem;
+                border-radius: 9999px;
+                font-weight: 700;
+                text-decoration: none;
+                font-size: 0.875rem;
+            '>← Try a different topic</a>
+        </div>
+        """, unsafe_allow_html=True)
         st.stop()
 
     # Step 2: Summarize
@@ -300,11 +319,11 @@ try:
     time.sleep(0.5)
     loading_container.empty()
 
-    # Results
+    # Results hint bar
     st.markdown("""
-    <div style='background: rgba(245,158,11,0.12); border-left: 3px solid #f59e0b;
-                border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem;'>
-        <p style='color: #fbbf24 !important; font-size: 0.875rem; margin: 0;'>
+    <div style='background:#fef9c3; border-left:3px solid #f59e0b;
+                border-radius:0.75rem; padding:1rem 1.25rem; margin-bottom:1.5rem;'>
+        <p style='color:#92400e; font-size:0.875rem; margin:0;'>
             ✏️ Use this guide to write your blog — these are directions, not drafts.
         </p>
     </div>
@@ -317,20 +336,30 @@ try:
             st.markdown(f"- [{s['title']}]({s['url']})")
 
     st.markdown("""
-    <div style='text-align:center; padding: 3rem 0 1rem; color:#475569; font-size:0.8rem; margin-top:2rem;'>
-        Powered by <strong style='color:#94a3b8;'>Amazon Bedrock (Nova Lite)</strong> &amp; Tavily
+    <div style='text-align:center; padding:3rem 0 1rem; color:#94a3b8;
+                font-size:0.8rem; margin-top:2rem;'>
+        Powered by <strong style='color:#64748b;'>Amazon Bedrock (Nova 2 Lite)</strong> &amp; Tavily
     </div>
     """, unsafe_allow_html=True)
 
-except Exception as e:
-    import traceback
+except Exception:
     loading_container.empty()
     st.markdown(f"""
-    <div style='background:rgba(239,68,68,0.1); padding:2rem; border-radius:1rem;
-                border-left:4px solid #ef4444;'>
-        <h3 style='color:#ef4444; margin-bottom:1rem;'>❌ Analysis Failed</h3>
-        <p style='color:#94a3b8;'>{str(e)}</p>
-        <a href='{LANDER_URL}' style='color:#f59e0b; font-size:0.9rem;'>← Try a different topic</a>
+    <div style='text-align:center; padding: 3rem 2rem;'>
+        <div style='font-size:2.5rem; margin-bottom:1rem;'>⚠️</div>
+        <h3 style='color:#1e293b; margin-bottom:0.75rem;'>Something went wrong</h3>
+        <p style='color:#64748b; margin-bottom:1.5rem; font-size:0.9rem;'>
+            We hit an issue analyzing this topic. Please try again with a different topic.
+        </p>
+        <a href='{LANDER_URL}' style='
+            display: inline-block;
+            background: #f59e0b;
+            color: #1e293b;
+            padding: 0.65rem 1.75rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.875rem;
+        '>← Try a different topic</a>
     </div>
     """, unsafe_allow_html=True)
-    st.code(traceback.format_exc(), language="python")
